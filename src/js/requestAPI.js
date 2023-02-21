@@ -2,14 +2,10 @@ const API = (() => {
   const API_KEY = "0899300cbaa38468fa1729a1906d7b78";
 
   const APICall = async (url) => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`${response.status}`);
-      const obj = await response.json();
-      return obj;
-    } catch (err) {
-      return console.error(err);
-    }
+    const response = await fetch(url).catch((err) => err);
+    if (!response.ok) throw response;
+    const obj = await response.json();
+    return obj;
   };
 
   const currentCall = (city, unit) => {
