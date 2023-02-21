@@ -9,8 +9,21 @@
     <script defer src="main.js"></script>
 </head>
 <body>
-    <div id="current-weather">
-        <i class="wi wi-day-sunny"></i>
+    <form action="#" novalidate>
+        <label for="search-city">City:</label>
+        <input type="text" name="city-name" id="search-city" required autocomplete="off">
+    </form>
+
+    <div class="current-wrapper">
+        <div id="current-weather">
+
+        </div>
+        <div class="error-msg">
+            <span>Can't find city. 
+            <br> Please make sure you entered a valid city name. 
+            <br> (e.g. "New York")
+            </span>
+        </div>
     </div>
 </body>
 </html>
