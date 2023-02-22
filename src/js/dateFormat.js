@@ -1,6 +1,8 @@
 import { format } from "date-fns";
 
 const Helpers = (() => {
+  const formatDateForecast = (date) => format(date, "EEEE K aaa");
+
   const formatDate = (date) =>
     format(date, "EEEE, MMMM dd.LL HH:mm").split(" ");
 
@@ -12,10 +14,11 @@ const Helpers = (() => {
 
     const timeZoneDifference = timezoneOffset * 1000;
     const localDate = new Date(nowUTC.getTime() + timeZoneDifference);
-    return formatDate(localDate);
+
+    return localDate;
   };
 
-  return { getLocalDate };
+  return { getLocalDate, formatDate, formatDateForecast };
 })();
 
 export default Helpers;

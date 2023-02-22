@@ -25,6 +25,13 @@ form.addEventListener("submit", (e) => {
         DOM.displayError("invalid city");
       } else DOM.displayError("network error");
     });
+
+  API.forecastCall(newCity, unit).then((result) => {
+    const { list } = result;
+    const timezoneMS = result.city.timezone * 1000;
+    const forecastInfo = Process.forecastWeather(list, timezoneMS);
+    DOM.updateForecast(forecastInfo, unit);
+  });
   input.value = "";
 });
 
@@ -34,7 +41,15 @@ API.currentCall(city, unit)
     DOM.updateCurrent(obj, unit);
   })
   .catch((err) => {
+    console.log(err);
     if (err instanceof Response) {
       DOM.displayError("invalid city");
     } else DOM.displayError("network error");
   });
+
+API.forecastCall(city, unit).then((result) => {
+  const { list } = result;
+  const timezoneMS = result.city.timezone * 1000;
+  const forecastInfo = Process.forecastWeather(list, timezoneMS);
+  DOM.updateForecast(forecastInfo, unit);
+});

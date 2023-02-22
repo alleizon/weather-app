@@ -22,6 +22,14 @@ const DOM = (() => {
       msg === "invalid city" ? constants.invalidCity : constants.networkError;
   };
 
+  const clearForecast = () => {
+    const error = document.querySelector(".active");
+    if (error) error.classList.remove("active");
+    const timestampWrapper = document.querySelector(".timestamp-wrapper");
+    while (timestampWrapper.lastElementChild)
+      timestampWrapper.lastElementChild.remove();
+  };
+
   const clearCurrent = () => {
     const error = document.querySelector(".active");
     if (error) error.classList.remove("active");
@@ -50,26 +58,45 @@ const DOM = (() => {
   const updateCurrent = (obj, unit) => {
     clearCurrent();
     const current = document.querySelector("#current-weather");
+
     const icon = currentIcon(obj.weather);
-    const cityName = document.createElement("p");
-    cityName.textContent = obj.name;
+    const location = document.createElement("p");
+    location.textContent = `${obj.name}, ${obj.countryName}`;
     const temp = document.createElement("span");
     temp.textContent = `${Math.round(obj.temp)} ${
       unit === "metric" ? constants.CELSIUS_F : constants.FAHRENHEIT_F
     }`;
     const { timezone } = obj;
     const wrapper = document.createElement("div");
-    const dateInfo = Helpers.getLocalDate(timezone);
+    const dateObj = Helpers.getLocalDate(timezone);
+    const formattedDate = Helpers.formatDate(dateObj);
     const dayMonth = document.createElement("p");
-    dayMonth.textContent = `${dateInfo[0]} ${dateInfo[1]}`;
+    dayMonth.textContent = `${formattedDate[0]} ${formattedDate[1]}`;
     const time = document.createElement("p");
-    time.textContent = `${dateInfo[2]} - ${dateInfo[3]}`;
-    wrapper.append(cityName, temp, icon);
+    time.textContent = `${formattedDate[2]} - ${formattedDate[3]}`;
+    wrapper.append(location, temp, icon);
 
     current.append(wrapper, dayMonth, time);
   };
 
-  return { updateCurrent, displayError };
+  const updateForecast = (list, unit) => {
+    clearForecast();
+    const container = document.querySelector(".timestamp-wrapper");
+
+    list.forEach((obj) => {
+      const timestamp = document.createElement("div");
+      const icon = currentIcon(obj.weather);
+      timestamp.classList.add("timestamp");
+      timestamp.innerHTML = `<p>${obj.formattedDate}</p>
+      <p>${Math.round(obj.temp)} ${
+        unit === "metric" ? constants.CELSIUS_F : constants.FAHRENHEIT_F
+      }</p>
+      ${icon.outerHTML}`;
+      container.appendChild(timestamp);
+    });
+  };
+
+  return { updateCurrent, updateForecast, displayError };
 })();
 
 export default DOM;
