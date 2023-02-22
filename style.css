@@ -39,3 +39,19 @@ body{
 .error-msg.active {
     display: inline;
 }
+
+#forecast-wrapper {
+    width: 80%;
+}
+
+.timestamp-wrapper {
+    display:flex;
+    margin-top: 2rem;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: fit-content;
+}
+
+.timestamp {
+    padding: 1rem 2rem;
+}
