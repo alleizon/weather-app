@@ -3,7 +3,8 @@ const Process = (() => {
     const { name } = obj;
     const { temp } = obj.main;
     const weather = obj.weather[0];
-    return { name, temp, weather };
+    const { timezone } = obj;
+    return { name, temp, weather, timezone };
   };
 
   return { currentWeather };
