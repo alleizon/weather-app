@@ -92,6 +92,7 @@ const DOM = (() => {
       temperatureCache.push(obj.temp);
       const timestamp = document.createElement("div");
       const icon = currentIcon(obj.weather);
+
       timestamp.classList.add("timestamp");
       timestamp.innerHTML = `<p>${obj.formattedDate}</p>
       <p data-unit="${unit}">${Math.round(obj.temp)} ${
