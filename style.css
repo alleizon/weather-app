@@ -55,3 +55,27 @@ body{
 .timestamp {
     padding: 1rem 2rem;
 }
+
+#unit-measurement {
+    display:flex;
+    gap: 3px;
+}
+
+#unit-measurement > button {
+    width: 27px;
+    height: 27px;
+}
+
+#unit-measurement > button > span {
+    display:inline-block;
+    transform: translateX(1px);
+    position: relative;
+}
+
+#unit-measurement > button > span::before {
+    position: absolute;
+    content: '°';
+    font-weight: 600;
+    top: 0;
+    right: 100%;
+}
