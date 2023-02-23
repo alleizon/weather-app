@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 
 const Helpers = (() => {
-  const formatDateForecast = (date) => format(date, "EEEE K aaa");
+  const formatDateForecast = (date) => format(date, "EEEE h aaa");
 
   const formatDate = (date) =>
     format(date, "EEEE, MMMM dd.LL HH:mm").split(" ");

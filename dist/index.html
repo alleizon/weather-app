@@ -9,7 +9,13 @@
     <script defer src="main.js"></script>
 </head>
 <body>
-    <form action="#" novalidate>
+
+    <div id="unit-measurement">
+        <button id="metric" type="button"><span>C</span></button>
+        <button id="imperial" type="button"><span>F</span></button>
+    </div>
+
+    <form action="#" id="weather" novalidate>
         <label for="search-city">City:</label>
         <input type="text" name="city-name" id="search-city" required autocomplete="off">
     </form>
@@ -27,5 +33,6 @@
         <div class="timestamp-wrapper">
         </div> 
     </div>
+
 </body>
 </html>

@@ -6,14 +6,31 @@ let city = "Bucharest";
 let unit = "metric";
 
 const input = document.querySelector("#search-city");
-const form = document.querySelector("form");
+const form = document.querySelector("form#weather");
+const celsiusBtn = document.querySelector("#metric");
+const fahrenheitBtn = document.querySelector("#imperial");
+
+celsiusBtn.addEventListener("click", (e) => {
+  const newUnit = e.currentTarget.id;
+  if (unit === newUnit) return;
+  unit = newUnit;
+  DOM.swapUnits(unit);
+});
+fahrenheitBtn.addEventListener("click", (e) => {
+  const newUnit = e.currentTarget.id;
+  if (unit === newUnit) return;
+  unit = newUnit;
+  DOM.swapUnits(unit);
+});
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
+  const newCity = input.value.trim();
+
   if (!form.checkValidity()) {
+    input.value = "";
     return;
   }
-  const newCity = input.value.trim();
   API.currentCall(newCity, unit)
     .then((result) => {
       const obj = Process.currentWeather(result);

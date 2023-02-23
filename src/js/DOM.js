@@ -3,8 +3,8 @@ import Helpers from "./dateFormat";
 
 const DOM = (() => {
   const constants = {
-    FAHRENHEIT_F: "°F",
-    CELSIUS_F: "°C",
+    imperial: "°F",
+    metric: "°C",
 
     invalidCity: `Can't find city. 
     <br> Please make sure you entered a valid city name. 
@@ -12,6 +12,8 @@ const DOM = (() => {
     networkError: `Network error.
     Please try again later.`,
   };
+
+  const temperatureCache = [];
 
   const displayError = (msg) => {
     const error = document.querySelector(".error-msg");
@@ -23,8 +25,6 @@ const DOM = (() => {
   };
 
   const clearForecast = () => {
-    const error = document.querySelector(".active");
-    if (error) error.classList.remove("active");
     const timestampWrapper = document.querySelector(".timestamp-wrapper");
     while (timestampWrapper.lastElementChild)
       timestampWrapper.lastElementChild.remove();
@@ -57,14 +57,18 @@ const DOM = (() => {
 
   const updateCurrent = (obj, unit) => {
     clearCurrent();
+    temperatureCache.length = 0;
+
+    temperatureCache.push(obj.temp);
     const current = document.querySelector("#current-weather");
 
     const icon = currentIcon(obj.weather);
     const location = document.createElement("p");
     location.textContent = `${obj.name}, ${obj.countryName}`;
     const temp = document.createElement("span");
+    temp.dataset.unit = unit;
     temp.textContent = `${Math.round(obj.temp)} ${
-      unit === "metric" ? constants.CELSIUS_F : constants.FAHRENHEIT_F
+      unit === "metric" ? constants.metric : constants.imperial
     }`;
     const { timezone } = obj;
     const wrapper = document.createElement("div");
@@ -81,22 +85,41 @@ const DOM = (() => {
 
   const updateForecast = (list, unit) => {
     clearForecast();
+
     const container = document.querySelector(".timestamp-wrapper");
 
     list.forEach((obj) => {
+      temperatureCache.push(obj.temp);
       const timestamp = document.createElement("div");
       const icon = currentIcon(obj.weather);
       timestamp.classList.add("timestamp");
       timestamp.innerHTML = `<p>${obj.formattedDate}</p>
-      <p>${Math.round(obj.temp)} ${
-        unit === "metric" ? constants.CELSIUS_F : constants.FAHRENHEIT_F
+      <p data-unit="${unit}">${Math.round(obj.temp)} ${
+        unit === "metric" ? constants.metric : constants.imperial
       }</p>
       ${icon.outerHTML}`;
       container.appendChild(timestamp);
     });
   };
 
-  return { updateCurrent, updateForecast, displayError };
+  const swapUnits = (newUnit) => {
+    const oldUnit = newUnit === "imperial" ? "metric" : "imperial";
+    const temps = Array.from(
+      document.querySelectorAll(`[data-unit="${oldUnit}"]`)
+    );
+
+    temps.forEach((e, index) => {
+      const element = e;
+      const cur = temperatureCache[index];
+      const newTemp =
+        newUnit === "imperial" ? (cur * 9) / 5 + 32 : ((cur - 32) * 5) / 9;
+      element.textContent = `${Math.round(newTemp)} ${constants[newUnit]}`;
+      element.dataset.unit = newUnit;
+      temperatureCache[index] = newTemp;
+    });
+  };
+
+  return { updateCurrent, updateForecast, displayError, swapUnits };
 })();
 
 export default DOM;

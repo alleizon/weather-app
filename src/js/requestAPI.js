@@ -8,12 +8,12 @@ const API = (() => {
     return obj;
   };
 
-  const currentCall = (city, unit) => {
+  const currentCall = async (city, unit) => {
     const CURRENT_URL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${unit}`;
     return APICall(CURRENT_URL);
   };
 
-  const forecastCall = (city, unit) => {
+  const forecastCall = async (city, unit) => {
     const FORECAST_URL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=${unit}`;
     return APICall(FORECAST_URL);
   };
