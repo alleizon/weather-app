@@ -23,6 +23,7 @@ const Helpers = (() => {
     );
     timestamps.classList.remove("active");
     timestamps.classList.add("hidden");
+    document.querySelector("i.fa-left-long").classList.add("hidden");
 
     const days = Array.from(document.querySelectorAll(".days-wrapper > .day"));
     days.forEach((dayDiv) => {

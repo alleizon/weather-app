@@ -28,6 +28,8 @@ const DOM = (() => {
     const timestampWrapper = document.querySelector(".days-wrapper");
     while (timestampWrapper.lastElementChild)
       timestampWrapper.lastElementChild.remove();
+
+    document.querySelector("i.fa-left-long").classList.add("hidden");
   };
 
   const clearCurrent = () => {
@@ -95,7 +97,6 @@ const DOM = (() => {
   const updateForecast = (data, unit) => {
     clearForecast();
 
-    console.log(data);
     const container = document.querySelector(".days-wrapper");
 
     data.forEach((day) => {
@@ -106,10 +107,13 @@ const DOM = (() => {
 
       let lowest = Infinity;
       let highest = -Infinity;
+      const toCache = [];
 
       day.forEach((timestamp) => {
         lowest = Math.min(lowest, timestamp.temp);
         highest = Math.max(highest, timestamp.temp);
+
+        toCache.push(timestamp.temp);
 
         const icon = currentIcon(timestamp.weather);
 
@@ -143,6 +147,8 @@ const DOM = (() => {
           ".days-wrapper > div.day:nth-last-child(2) > button:last-child"
         )
         .addEventListener("click", Helpers.renderTimestamps);
+      temperatureCache.push(lowest, highest);
+      toCache.forEach((temp) => temperatureCache.push(temp));
     });
   };
 

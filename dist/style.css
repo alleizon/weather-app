@@ -129,6 +129,7 @@ main {
     gap: 10px;
     justify-content: space-between;
     align-items: center;
+    width: 150px;
     height: 200px;
     background-color: rgba(255, 192, 203, 0.158);
     border: 1px solid rgba(0, 0, 0, 0.507);
@@ -167,7 +168,20 @@ button.day-expand {
     border: 0px solid transparent;
     border-radius: 50%;
     cursor: pointer;
+    font-weight: 600;
+    font-size: 1.5rem;
     color: white;
+    transition: all 0.2s ease-in;
+}
+
+i.fa-solid.fa-left-long {
+    transition: all 0.2s ease-in;
+}
+
+button.day-expand:hover,
+i.fa-solid.fa-left-long:hover {
+    color: var(--pink-color);
+
 }
 
 #unit-measurement {
