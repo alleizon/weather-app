@@ -3,8 +3,7 @@ import { format } from "date-fns";
 const Helpers = (() => {
   const formatDateForecast = (date) => format(date, "EEEE h aaa");
 
-  const formatDate = (date) =>
-    format(date, "EEEE, MMMM dd.LL HH:mm").split(" ");
+  const formatDate = (date) => format(date, "EEEE dd LLL HH:mm").split(" ");
 
   const getLocalDate = (timezoneOffset) => {
     const now = new Date();

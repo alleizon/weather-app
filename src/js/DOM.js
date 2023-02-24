@@ -31,7 +31,7 @@ const DOM = (() => {
   };
 
   const clearCurrent = () => {
-    const error = document.querySelector(".active");
+    const error = document.querySelector(".error-msg.active");
     if (error) error.classList.remove("active");
     const current = document.querySelector("#current-weather");
     while (current.lastElementChild) current.lastElementChild.remove();
@@ -63,24 +63,33 @@ const DOM = (() => {
     const current = document.querySelector("#current-weather");
 
     const icon = currentIcon(obj.weather);
+
     const location = document.createElement("p");
+    location.dataset.location = "";
     location.textContent = `${obj.name}, ${obj.countryName}`;
+
     const temp = document.createElement("span");
     temp.dataset.unit = unit;
     temp.textContent = `${Math.round(obj.temp)} ${
       unit === "metric" ? constants.metric : constants.imperial
     }`;
+
     const { timezone } = obj;
-    const wrapper = document.createElement("div");
     const dateObj = Helpers.getLocalDate(timezone);
     const formattedDate = Helpers.formatDate(dateObj);
-    const dayMonth = document.createElement("p");
-    dayMonth.textContent = `${formattedDate[0]} ${formattedDate[1]}`;
-    const time = document.createElement("p");
-    time.textContent = `${formattedDate[2]} - ${formattedDate[3]}`;
-    wrapper.append(location, temp, icon);
 
-    current.append(wrapper, dayMonth, time);
+    const day = document.createElement("p");
+    day.dataset.day = "";
+    day.textContent = formattedDate[0];
+
+    const time = document.createElement("p");
+    time.dataset.datetime = "";
+    time.textContent = `${formattedDate[1]} ${formattedDate[2]} ${formattedDate[3]}`;
+
+    const wrapper = document.createElement("div");
+    wrapper.append(temp, icon);
+
+    current.append(location, day, time, wrapper);
   };
 
   const updateForecast = (list, unit) => {
