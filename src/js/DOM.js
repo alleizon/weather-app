@@ -1,5 +1,5 @@
 import weatherIcons from "../assets/icons.json";
-import Helpers from "./dateFormat";
+import Helpers from "./helpers";
 
 const DOM = (() => {
   const constants = {
@@ -25,7 +25,7 @@ const DOM = (() => {
   };
 
   const clearForecast = () => {
-    const timestampWrapper = document.querySelector(".timestamp-wrapper");
+    const timestampWrapper = document.querySelector(".days-wrapper");
     while (timestampWrapper.lastElementChild)
       timestampWrapper.lastElementChild.remove();
   };
@@ -80,7 +80,7 @@ const DOM = (() => {
 
     const day = document.createElement("p");
     day.dataset.day = "";
-    day.textContent = formattedDate[0];
+    [day.textContent] = formattedDate;
 
     const time = document.createElement("p");
     time.dataset.datetime = "";
@@ -92,23 +92,57 @@ const DOM = (() => {
     current.append(location, day, time, wrapper);
   };
 
-  const updateForecast = (list, unit) => {
+  const updateForecast = (data, unit) => {
     clearForecast();
 
-    const container = document.querySelector(".timestamp-wrapper");
+    console.log(data);
+    const container = document.querySelector(".days-wrapper");
 
-    list.forEach((obj) => {
-      temperatureCache.push(obj.temp);
-      const timestamp = document.createElement("div");
-      const icon = currentIcon(obj.weather);
+    data.forEach((day) => {
+      const dayE = document.createElement("div");
+      dayE.classList.add("day");
+      const timestampContainer = document.createElement("div");
+      timestampContainer.classList.add("day-expanded", "hidden");
 
-      timestamp.classList.add("timestamp");
-      timestamp.innerHTML = `<p>${obj.formattedDate}</p>
-      <p data-unit="${unit}">${Math.round(obj.temp)} ${
-        unit === "metric" ? constants.metric : constants.imperial
-      }</p>
-      ${icon.outerHTML}`;
-      container.appendChild(timestamp);
+      let lowest = Infinity;
+      let highest = -Infinity;
+
+      day.forEach((timestamp) => {
+        lowest = Math.min(lowest, timestamp.temp);
+        highest = Math.max(highest, timestamp.temp);
+
+        const icon = currentIcon(timestamp.weather);
+
+        const hiddenTimestamp = document.createElement("div");
+        hiddenTimestamp.classList.add("timestamp");
+        hiddenTimestamp.innerHTML = `<span data-timestamp-time>${
+          timestamp.day
+        } ${timestamp.time}</span>
+        <span data-timestamp-temp data-unit="${unit}">${Math.round(
+          timestamp.temp
+        )} ${constants[unit]}</span>
+        ${icon.outerHTML}`;
+
+        timestampContainer.appendChild(hiddenTimestamp);
+      });
+
+      dayE.innerHTML = `<span data-forecast-day="${day[0].day}">${
+        day[0].day
+      }</span>
+      <span data-forecast-min-temp>min: <span data-unit="${unit}">${Math.round(
+        lowest
+      )} ${constants[unit]}</span></span>
+      <span data-forecast-max-temp>max: <span data-unit="${unit}">${Math.round(
+        highest
+      )} ${constants[unit]}</span></span>
+      <button type="button" class="day-expand"><i class="fa-solid fa-angle-right"></i></button>`;
+
+      container.append(dayE, timestampContainer);
+      document
+        .querySelector(
+          ".days-wrapper > div.day:nth-last-child(2) > button:last-child"
+        )
+        .addEventListener("click", Helpers.renderTimestamps);
     });
   };
 

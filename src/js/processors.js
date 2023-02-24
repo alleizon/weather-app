@@ -1,4 +1,4 @@
-import Helpers from "./dateFormat";
+import Helpers from "./helpers";
 
 const Process = (() => {
   const currentWeather = (obj) => {
@@ -13,16 +13,39 @@ const Process = (() => {
   };
 
   const forecastWeather = (list, timezoneOffsetMS) => {
-    const n = list.map((timestamp) => {
+    const uniqueDays = new Set();
+    let addedDays = 1;
+    const timestampsByDay = [];
+    const newDay = [];
+
+    list.forEach((timestamp, index) => {
       const timeMS =
         timestamp.dt * 1000 + new Date().getTimezoneOffset() * 60 * 1000;
       const date = new Date(timeMS + timezoneOffsetMS);
-      const formattedDate = Helpers.formatDateForecast(date);
+      const formattedDate = Helpers.formatDateForecast(date).split(" ");
+      const [day, time] = [
+        formattedDate[0],
+        formattedDate[1].concat(` ${formattedDate[2]}`),
+      ];
       const { temp } = timestamp.main;
       const weather = timestamp.weather[0];
-      return { formattedDate, temp, weather };
+
+      uniqueDays.add(day);
+      if (index === list.length - 1) {
+        timestampsByDay.push(newDay);
+      }
+      if (uniqueDays.size === addedDays + 1) {
+        const tmp = newDay.slice();
+        timestampsByDay.push(tmp);
+        newDay.length = 0;
+        newDay.push({ day, time, temp, weather });
+        addedDays += 1;
+      } else {
+        newDay.push({ day, time, temp, weather });
+      }
     });
-    return n;
+
+    return timestampsByDay;
   };
 
   return { currentWeather, forecastWeather };
