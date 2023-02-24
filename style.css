@@ -93,7 +93,6 @@ main {
 }
 
 #forecast-wrapper {
-    overflow-x: scroll;
     position: relative;
     width: 80%;
     padding: 15px;
