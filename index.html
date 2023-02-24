@@ -10,24 +10,22 @@
 </head>
 <body>
 
-    <div id="unit-measurement">
-        <button id="metric" type="button"><span>C</span></button>
-        <button id="imperial" type="button"><span>F</span></button>
-    </div>
-
-    <form action="#" id="weather" novalidate>
-        <label for="search-city">City:</label>
-        <input type="text" name="city-name" id="search-city" required autocomplete="off">
-    </form>
-
-    <div class="current-wrapper">
-        <div id="current-weather">
-
+    <main>
+        <div id="unit-measurement">
+            <button id="metric" class="active" type="button"><span>C</span></button>
+            <button id="imperial" type="button"><span>F</span></button>
         </div>
-        <div class="error-msg">
-            <span></span>
+        <form action="#" id="weather" novalidate>
+            <input type="text" name="city-name" id="search-city" placeholder="City name..." required autocomplete="off">
+        </form>
+        <div class="current-wrapper">
+            <div id="current-weather">
+            </div>
+            <div class="error-msg">
+                <span></span>
+            </div>
         </div>
-    </div>
+    </main>
     <div id="forecast-wrapper">
         <h1>5 day forecast (timestamp every 3 hours)</h1>
         <div class="timestamp-wrapper">
